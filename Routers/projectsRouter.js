@@ -27,11 +27,10 @@ router.get('/:id', (req, res) => {
 })
 
 
-
 router.get('/:id/actions', (req, res) => {
     const { id }  = req.params;
 
-    db.getprojectPosts(id)
+    db.getProjectActions(id)
     .then(posts => {
         res.status(200).json(posts);
     })
@@ -76,5 +75,30 @@ router.post('/add', (req, res) => {
         res.status(422).json(console.error('JSON has too many attributes'));
       }
     });
+
+    router.put('/:id/update', (req, res) => {
+        const { id } = req.params;
+        const project = req.body;
+    
+        db.update(id, project)
+        .then(updated => {
+            res.status(200).json(updated);
+        })
+        .catch(error => {
+            res.status(500).json(console.error( `Could not update. Refer to ${error}`));
+        })
+    })
+    
+    router.delete('/:id/delete', (req, res) => {
+        const { id } = req.params;
+    
+        db.remove(id)
+        .then(removed => {
+            res.status(200).json(removed);
+        })
+        .catch(error => {
+            res.status(500).json(console.error(`Can not delete. Refer to ${error}`));
+        })
+    })
 
 module.exports = router;
