@@ -13,7 +13,7 @@ function checkActionToProjectId(req, res, next) {
             res.status(404).json(console.error('The project with the specified ID does not exist.'));
             return;
         } else {
-            next();
+            next(); 
         }
     })
 };
