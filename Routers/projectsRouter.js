@@ -50,7 +50,7 @@ router.post('/add', (req, res) => {
           if (typeof project.name === 'string' && typeof project.description === 'string') {
               
             if (project.name.trim().length === 0 || project.description.trim().length === 0) {
-              res.status(422).json(console.error('Name is required'));
+              res.status(422).json(console.error('Name and description are required'));
             }
                
                 if (project.name.trim().length > length) {
