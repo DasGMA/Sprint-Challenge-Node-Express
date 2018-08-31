@@ -2,7 +2,21 @@ const express = require('express');
 const router = express.Router();
 
 const db = require('../data/helpers/actionModel');
+const dbProject = require('../Data/helpers/projectModel');
 
+
+function checkActionToProjectId(req, res, next) {
+    const { project_id } = req.body;
+    dbProject.get(project_id)
+    .then(project => {
+        if (!project) {
+            res.status(404).json(console.error('The project with the specified ID does not exist.'));
+            return;
+        } else {
+            next();
+        }
+    })
+};
 
 router.get('/', (req, res)=> {
     db.get()
@@ -28,7 +42,7 @@ router.get('/:id', (req, res)=> {
 })
 
 
-router.post('/add', (req, res) => {
+router.post('/add', checkActionToProjectId, (req, res) => {
     const action = req.body;
     const length = 128;
     
@@ -39,7 +53,7 @@ router.post('/add', (req, res) => {
           if (typeof action.notes === 'string' && typeof action.description === 'string' && typeof action.project_id === 'number') {
               
             if (action.notes.trim().length === 0 || action.description.trim().length === 0 || !action.project_id) {
-              res.status(422).json(console.error('Notes and description are required'));
+              res.status(422).json(console.error('Notes, project_id and description are required'));
             }
                
                 if (action.description.trim().length > length) {
